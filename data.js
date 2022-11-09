@@ -40,7 +40,7 @@ router.post("/",(req,res,next)=>{
     })
 })
 
-router.get("/colleges", cache("50 minutes"), async (req,res,next)=>{
+router.get("/colleges", cache("100 minutes"), async (req,res,next)=>{
     let College = await college.find();
     if(College.length>0){
         res.status(200).json({
