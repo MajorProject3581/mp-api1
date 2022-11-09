@@ -4,6 +4,8 @@ const router = express.Router();
 const college = require('./dataSchema');
 const mongoose = require('mongoose');
 const { response } = require('express');
+var cacheService = require("express-api-cache");
+var cache = cacheService.cache;
 
 router.post("/",(req,res,next)=>{
     const data = new college({
@@ -38,7 +40,7 @@ router.post("/",(req,res,next)=>{
     })
 })
 
-router.get("/colleges", async (req,res,next)=>{
+router.get("/colleges", cache("10 minutes"), async (req,res,next)=>{
     let College = await college.find();
     if(College.length>0){
         res.status(200).json({
