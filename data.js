@@ -1,21 +1,33 @@
 const cors = require('cors');
 const express = require('express');
 const router = express.Router();
-const dataSchema = require('./dataSchema');
+const college = require('./dataSchema');
 const mongoose = require('mongoose');
+const { response } = require('express');
 
 router.post("/",(req,res,next)=>{
-    const data = new dataSchema({
+    const data = new college({
     _id:new mongoose.Types.ObjectId,
-    name:req.body.name,
-    email:req.body.email,
-    phone:req.body.phone
+    Name:req.body.Name,
+    AllDept:req.body.AllDept,
+    AllCaste:req.body.AllCaste,
+    Dept:req.body.Dept,
+    Location:req.body.Location,
+    Website:req.body.Website,
+    Autonomy_status:req.body.Autonomy_status,
+    College_Status:req.body.College_Status,
+    HostelAvailability:req.body.HostelAvailability,
+    Rating:req.body.Rating,
+    LogoURL:req.body.LogoURL,
+    Pdflink:req.body.Pdflink,
+    minFees:req.body.minFees,
+    maxFees:req.body.maxFees
     })
     data.save()
     .then(result=>{
         console.log(result);
         res.status(200).json({
-            newdataSchema : result
+            college : result
         })
     })
     .catch(err=>{
@@ -26,20 +38,26 @@ router.post("/",(req,res,next)=>{
     })
 })
 
-router.get("/",(req,res,next)=>{
-    // res.set('Access-Control-Allow-Origin', 'https://vk-api-for-me-mm.herokuapp.com/data')
-    dataSchema.find()
-    .then(result=>{
+router.get("/colleges", async (req,res,next)=>{
+    let College = await college.find();
+    if(College.length>0){
         res.status(200).json({
-            data:result
+            data:College
         })
-    })
-    .catch(err=>{
-        console.log('error');
-        res.status(500).json({
-            error:err
+    }else{
+        res.send({result:"No Results Found"})
+    }
+})
+
+router.get("/colleges/:Name",async (req,res)=>{
+    let results = await college.find({Name:req.params.Name});
+    if(results){
+        res.status(200).json({
+            data:results
         })
-    })
+    }else{
+        res.send({results:"No Record found"})
+    }
 })
 
 module.exports = router;

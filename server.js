@@ -3,6 +3,48 @@ const cors = require('cors')
 const app = express();
 const port = process.env.PORT || 3001;
 app.use(cors());
+
+const data = require('./data')
+const mongoose = require('mongoose');
+const bodyparser = require('body-parser');
+mongoose.connect('mongodb+srv://MajorProject:ASVSA@cluster0.qp4h0vr.mongodb.net/?retryWrites=true&w=majority');
+
+mongoose.connection.on('error',err=>{
+    console.log('Connection failed');
+});
+
+mongoose.connection.on('connected',connected=>{
+    console.log('Connection Successful');
+});
+
+app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.json());
+
+app.use("/",data);
+
+
+
+app.listen(port, () => {
+    console.log("3001");
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const data = {};
 
 // const DB = 'mongodb+srv://USER:USER@cluster0.xbnqse2.mongodb.net/?retryWrites=true&w=majority';
@@ -22,28 +64,3 @@ app.use(cors());
 // app.get('/data',(req,res)=>{
 //     res.send(d);
 // })
-
-
-const data = require('./data')
-const mongoose = require('mongoose');
-const bodyparser = require('body-parser');
-mongoose.connect('mongodb+srv://USER:USER@cluster0.xbnqse2.mongodb.net/?retryWrites=true&w=majority');
-
-mongoose.connection.on('error',err=>{
-    console.log('Connection failed');
-});
-
-mongoose.connection.on('connected',connected=>{
-    console.log('Connection Successful');
-});
-
-app.use(bodyparser.urlencoded({extended:false}));
-app.use(bodyparser.json());
-
-app.use("/",data);
-
-
-
-app.listen(port, () => {
-    console.log("8080");
-})
